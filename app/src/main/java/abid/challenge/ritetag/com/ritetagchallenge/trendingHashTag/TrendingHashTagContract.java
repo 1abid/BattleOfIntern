@@ -11,11 +11,11 @@ import abid.challenge.ritetag.com.ritetagchallenge.BaseView;
 public interface TrendingHashTagContract {
 
   interface view extends BaseView<Presenter>{
-
+    void showInitialActivity();
   }
 
 
   interface Presenter extends BasePresenter{
-
+    void logOutUser();
   }
 }

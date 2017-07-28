@@ -44,5 +44,6 @@ ext {
   rulesVersion = '0.5'
   espressoVersion = '2.2.2'
   twitterVersion = '3.0.0'
+  eventBusVersion = '3.0.0'
 }
 

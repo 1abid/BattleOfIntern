@@ -41,15 +41,8 @@ public class TwitterLoginPresenter implements TwitterLoginContract.Presenter {
   @Override public void start() {
     mDataSource.isUserSaved(new UserDataSource.CheckUserExistsCallback() {
       @Override public void onUserFound(boolean found) {
-        if (!found) {
-          mTwitterLoginView.showToast(Snackbar.make(mTwitterLoginView.getLogInButton(),
-              mTwitterLoginView.shareContext().getString(R.string.not_saved_user),
-              BaseTransientBottomBar.LENGTH_SHORT));
-        } else {
-          mTwitterLoginView.showToast(Snackbar.make(mTwitterLoginView.getLogInButton() , mTwitterLoginView.shareContext().getString(
-                        R.string.welcome) , BaseTransientBottomBar.LENGTH_SHORT));
+        if (found)
           mTwitterLoginView.goToNextActivity();
-        }
       }
     });
   }

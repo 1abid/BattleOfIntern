@@ -1,11 +1,14 @@
 package abid.challenge.ritetag.com.ritetagchallenge.trendingHashTag;
 
+import abid.challenge.ritetag.com.ritetagchallenge.Injection;
 import abid.challenge.ritetag.com.ritetagchallenge.R;
+import abid.challenge.ritetag.com.ritetagchallenge.util.ActivityUtils;
 import abid.challenge.ritetag.com.ritetagchallenge.util.EspressoIdlingResource;
 import android.content.Intent;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.NavigationView;
 import android.support.test.espresso.IdlingResource;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,12 +20,16 @@ public class TrendingHashTagActivity extends AppCompatActivity {
 
   private DrawerLayout mDrawerLayout;
 
+  private TrendingHashTagPresenter mHashTagPresenter;
+
+  private Toolbar toolbar ;
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_trending_hash_tag);
 
     // Set up the toolbar.
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     ActionBar ab = getSupportActionBar();
     ab.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -35,6 +42,32 @@ public class TrendingHashTagActivity extends AppCompatActivity {
     if (navigationView != null) {
       setupDrawerContent(navigationView);
     }
+
+
+    TrendingHashTagFragment hashTagFragment =
+        (TrendingHashTagFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+    if (hashTagFragment == null) {
+      // Create the fragment
+      hashTagFragment = TrendingHashTagFragment.newInstance();
+      ActivityUtils.addFragmentToActivity(
+          getSupportFragmentManager(), hashTagFragment, R.id.contentFrame);
+    }
+
+    // Create the presenter
+    mHashTagPresenter = new TrendingHashTagPresenter(
+        Injection.provideUserDataSource(getApplicationContext()) , hashTagFragment);
+
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case android.R.id.home:
+        // Open the navigation drawer when the home icon is selected from the toolbar.
+        mDrawerLayout.openDrawer(GravityCompat.START);
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
 
@@ -49,7 +82,7 @@ public class TrendingHashTagActivity extends AppCompatActivity {
                 // Do nothing, we're already on that screen
                 break;
               case R.id.log_out_menu_item:
-                //TODO delete user from DB and show initial app screen
+                mHashTagPresenter.logOutUser();
                 break;
               default:
                 break;
@@ -66,4 +99,5 @@ public class TrendingHashTagActivity extends AppCompatActivity {
   public IdlingResource getCountingIdlingResource() {
     return EspressoIdlingResource.getIdlingResource();
   }
+
 }
