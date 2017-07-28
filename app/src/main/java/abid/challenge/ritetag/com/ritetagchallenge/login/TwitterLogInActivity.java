@@ -1,5 +1,6 @@
 package abid.challenge.ritetag.com.ritetagchallenge.login;
 
+import abid.challenge.ritetag.com.ritetagchallenge.Injection;
 import abid.challenge.ritetag.com.ritetagchallenge.R;
 import abid.challenge.ritetag.com.ritetagchallenge.util.ActivityUtils;
 import abid.challenge.ritetag.com.ritetagchallenge.util.EspressoIdlingResource;
@@ -9,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class TwitterLogInActivity extends AppCompatActivity {
+
+  private TwitterLoginPresenter mTwitterPresenter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -23,6 +26,10 @@ public class TwitterLogInActivity extends AppCompatActivity {
       ActivityUtils.addFragmentToActivity(
           getSupportFragmentManager(), twitterLoginFragment, R.id.contentFrame);
     }
+
+    // Create the presenter
+    mTwitterPresenter = new TwitterLoginPresenter(
+        Injection.provideUserDataSource(getApplicationContext()) , twitterLoginFragment);
   }
 
 

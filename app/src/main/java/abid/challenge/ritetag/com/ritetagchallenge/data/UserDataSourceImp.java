@@ -88,4 +88,36 @@ public class UserDataSourceImp implements UserDataSource {
 
     userLogoutCallback.onUserLogout();
   }
+
+  @Override public void isUserSaved(@NonNull CheckUserExistsCallback checkUserExistsCallback) {
+    User user = null;
+    SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+    String[] projection = {
+        UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_NAME,
+        UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_ID
+    };
+
+    Cursor c = db.query(
+        UserContract.UserEntry.TABLE_NAME, projection, null, null, null, null, null);
+
+    if(c != null && c.moveToFirst()){
+      String userName = c.getString(c.getColumnIndexOrThrow(UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_NAME));
+      String userId = c.getString(c.getColumnIndexOrThrow(UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_ID));
+
+      user = new User(userName , userId) ;
+    }
+
+    if (c != null) {
+      c.close();
+    }
+
+    db.close();
+
+    if(user != null)
+       checkUserExistsCallback.onUserFound(true);
+    else
+       checkUserExistsCallback.onUserFound(false);
+
+  }
 }

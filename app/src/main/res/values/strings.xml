@@ -12,4 +12,7 @@
   //riteTag
   <string name="riteTag_clientId">5c715bd5904082e5bedd541be634ab97c6b97fa9318a</string>
   <string name="riteTag_clientSecret">5c715bd5904082e5bedd541be634ab97c6b97fa9318a</string>
+
+  //toasts
+  <string name="not_saved_user">A user is not saved</string>
 </resources>

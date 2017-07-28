@@ -16,6 +16,10 @@ public interface UserDataSource {
     void onUserNotFound();
   }
 
+  interface CheckUserExistsCallback{
+    void onUserFound(boolean found);
+  }
+
   interface UserLogoutCallback{
     void onUserLogout();
   }
@@ -25,4 +29,6 @@ public interface UserDataSource {
   void getUser(@NonNull GetUserCallback getUserCallback);
 
   void logOut(@NonNull UserLogoutCallback userLogoutCallback);
+
+  void isUserSaved(@NonNull CheckUserExistsCallback checkUserExistsCallback);
 }
