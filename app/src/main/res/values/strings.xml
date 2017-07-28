@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">RiteTag challenge</string>
+
+  <string name="list_title">Trending Hash-Tags</string>
+  <string name="statistics_title">Log Out</string>
+  <string name="navigation_view_header_title">Internship App challenge</string>
+</resources>
