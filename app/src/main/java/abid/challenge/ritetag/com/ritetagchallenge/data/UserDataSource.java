@@ -24,7 +24,11 @@ public interface UserDataSource {
     void onUserLogout();
   }
 
-  void saveUser(@NonNull User user);
+  interface SaveUserCallback{
+    void onSuccessFullUserSave();
+  }
+
+  void saveUser(@NonNull User user , @NonNull SaveUserCallback saveUserCallback);
 
   void getUser(@NonNull GetUserCallback getUserCallback);
 

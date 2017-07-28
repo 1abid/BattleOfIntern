@@ -34,7 +34,7 @@ public class UserDataSourceImp implements UserDataSource {
   }
 
 
-  @Override public void saveUser(@NonNull User user) {
+  @Override public void saveUser(@NonNull User user , @NonNull SaveUserCallback callback) {
     checkNotNull(user);
     SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -45,6 +45,8 @@ public class UserDataSourceImp implements UserDataSource {
     db.insert(UserContract.UserEntry.TABLE_NAME, null, values);
 
     db.close();
+
+    callback.onSuccessFullUserSave();
   }
 
   @Override public void getUser(@NonNull GetUserCallback getUserCallback) {
@@ -62,7 +64,7 @@ public class UserDataSourceImp implements UserDataSource {
 
     if(c != null && c.moveToFirst()){
       String userName = c.getString(c.getColumnIndexOrThrow(UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_NAME));
-      String userId = c.getString(c.getColumnIndexOrThrow(UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_ID));
+      long userId = c.getLong(c.getColumnIndexOrThrow(UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_ID));
 
       user = new User(userName , userId) ;
     }
@@ -103,7 +105,7 @@ public class UserDataSourceImp implements UserDataSource {
 
     if(c != null && c.moveToFirst()){
       String userName = c.getString(c.getColumnIndexOrThrow(UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_NAME));
-      String userId = c.getString(c.getColumnIndexOrThrow(UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_ID));
+      long userId = c.getLong(c.getColumnIndexOrThrow(UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_ID));
 
       user = new User(userName , userId) ;
     }

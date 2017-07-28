@@ -1,14 +1,17 @@
 package abid.challenge.ritetag.com.ritetagchallenge.login;
 
 import abid.challenge.ritetag.com.ritetagchallenge.R;
+import abid.challenge.ritetag.com.ritetagchallenge.data.User;
 import abid.challenge.ritetag.com.ritetagchallenge.data.UserDataSource;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
@@ -43,8 +46,9 @@ public class TwitterLoginPresenter implements TwitterLoginContract.Presenter {
               mTwitterLoginView.shareContext().getString(R.string.not_saved_user),
               BaseTransientBottomBar.LENGTH_SHORT));
         } else {
-
-          //TODO let the user enter to next level
+          mTwitterLoginView.showToast(Snackbar.make(mTwitterLoginView.getLogInButton() , mTwitterLoginView.shareContext().getString(
+                        R.string.welcome) , BaseTransientBottomBar.LENGTH_SHORT));
+          mTwitterLoginView.goToNextActivity();
         }
       }
     });
@@ -56,12 +60,27 @@ public class TwitterLoginPresenter implements TwitterLoginContract.Presenter {
     twitterLoginButton.setCallback(new Callback<TwitterSession>() {
       @Override public void success(Result<TwitterSession> result) {
         Log.d(getClass().getSimpleName() , "success twitter login :"+result.data.getUserName());
+        saveUser(result);
       }
 
       @Override public void failure(TwitterException exception) {
         Log.d(getClass().getSimpleName() , "failed twitter login :"+exception.getMessage());
+
       }
     });
 
+  }
+
+  private void saveUser(Result<TwitterSession> result ) {
+    User user ;
+    String userTwitterName = result.data.getUserName();
+    long userTwitterId = result.data.getUserId();
+
+    user = new User(userTwitterName , userTwitterId);
+    mDataSource.saveUser(user, new UserDataSource.SaveUserCallback() {
+      @Override public void onSuccessFullUserSave() {
+        mTwitterLoginView.goToNextActivity();
+      }
+    });
   }
 }

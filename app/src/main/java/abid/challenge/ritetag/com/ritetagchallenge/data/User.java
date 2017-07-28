@@ -8,9 +8,9 @@ package abid.challenge.ritetag.com.ritetagchallenge.data;
 public class User {
 
   private String userTwitterName ;
-  private String userTwitterId ;
+  private long userTwitterId ;
 
-  public User(String userTwitterName, String userTwitterId) {
+  public User(String userTwitterName, long userTwitterId) {
     this.userTwitterName = userTwitterName;
     this.userTwitterId = userTwitterId;
   }
@@ -20,7 +20,7 @@ public class User {
   }
 
 
-  public String getUserTwitterId() {
+  public long getUserTwitterId() {
     return userTwitterId;
   }
 

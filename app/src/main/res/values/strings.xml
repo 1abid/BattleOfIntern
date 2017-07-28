@@ -15,4 +15,5 @@
 
   //toasts
   <string name="not_saved_user">A user is not saved</string>
+  <string name="welcome">Welcome back</string>
 </resources>

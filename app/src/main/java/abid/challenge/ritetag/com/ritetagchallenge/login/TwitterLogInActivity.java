@@ -33,7 +33,7 @@ public class TwitterLogInActivity extends AppCompatActivity {
     mTwitterPresenter = new TwitterLoginPresenter(
         Injection.provideUserDataSource(getApplicationContext()) , twitterLoginFragment);
 
-    Twitter.initialize(this);
+
   }
 
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {

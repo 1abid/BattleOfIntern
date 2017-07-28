@@ -1,15 +1,19 @@
 package abid.challenge.ritetag.com.ritetagchallenge.login;
 
 import abid.challenge.ritetag.com.ritetagchallenge.R;
+import abid.challenge.ritetag.com.ritetagchallenge.trendingHashTag.TrendingHashTagActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -32,6 +36,11 @@ public class TwitterLoginFragment extends Fragment implements TwitterLoginContra
     return new TwitterLoginFragment();
   }
 
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    Twitter.initialize(getContext());
+  }
+
   @Nullable @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
@@ -46,7 +55,7 @@ public class TwitterLoginFragment extends Fragment implements TwitterLoginContra
 
   @Override public void onResume() {
     super.onResume();
-    //mPresenter.start();
+    mPresenter.start();
   }
 
   @Override public void setPresenter(TwitterLoginContract.Presenter presenter) {
@@ -54,7 +63,8 @@ public class TwitterLoginFragment extends Fragment implements TwitterLoginContra
   }
 
   @Override public void goToNextActivity() {
-
+      startActivity(new Intent(getContext() , TrendingHashTagActivity.class));
+    getActivity().finish();
   }
 
   @Override public void showToast(Snackbar snakbar) {
@@ -73,5 +83,11 @@ public class TwitterLoginFragment extends Fragment implements TwitterLoginContra
 
   @Override public Context shareContext() {
     return getContext();
+  }
+
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    twitterLoginButton.onActivityResult(requestCode , resultCode , data);
   }
 }

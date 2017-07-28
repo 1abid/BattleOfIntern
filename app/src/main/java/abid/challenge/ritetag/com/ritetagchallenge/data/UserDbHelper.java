@@ -17,7 +17,7 @@ public class UserDbHelper extends SQLiteOpenHelper {
 
   private static final String TEXT_TYPE = " TEXT";
 
-  private static final String BOOLEAN_TYPE = " INTEGER";
+  private static final String TYPE_INT = " INTEGER";
 
   private static final String AUTO_INC = " AUTOINCREMENT";
 
@@ -27,9 +27,9 @@ public class UserDbHelper extends SQLiteOpenHelper {
 
   private static final String SQL_CREATE_ENTRIES =
       "CREATE TABLE " + UserContract.UserEntry.TABLE_NAME + " (" +
-          UserContract.UserEntry._ID + BOOLEAN_TYPE + " PRIMARY KEY" +AUTO_INC +COMMA_SEP+
+          UserContract.UserEntry._ID + TYPE_INT + " PRIMARY KEY" +AUTO_INC +COMMA_SEP+
           UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_NAME + TEXT_TYPE + COMMA_SEP +
-          UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_ID + TEXT_TYPE +
+          UserContract.UserEntry.COLUMN_NAME_TWITTER_USER_ID + TYPE_INT +
           " )";
 
   public UserDbHelper(Context context) {
