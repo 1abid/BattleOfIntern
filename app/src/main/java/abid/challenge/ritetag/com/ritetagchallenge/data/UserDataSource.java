@@ -1,0 +1,28 @@
+package abid.challenge.ritetag.com.ritetagchallenge.data;
+
+import android.support.annotation.NonNull;
+
+/**
+ * Created by VutkaBilai on 7/28/17.
+ * mail : la4508@gmail.com
+ */
+
+public interface UserDataSource {
+
+  interface GetUserCallback {
+
+    void onUserFound(User user);
+
+    void onUserNotFound();
+  }
+
+  interface UserLogoutCallback{
+    void onUserLogout();
+  }
+
+  void saveUser(@NonNull User user);
+
+  void getUser(@NonNull GetUserCallback getUserCallback);
+
+  void logOut(@NonNull UserLogoutCallback userLogoutCallback);
+}

@@ -4,4 +4,12 @@
   <string name="list_title">Trending Hash-Tags</string>
   <string name="statistics_title">Log Out</string>
   <string name="navigation_view_header_title">Internship App challenge</string>
+
+  //twitter
+  <string name="com.twitter.sdk.android.CONSUMER_KEY">1mMTDqoOmrjONBZUgQov343YL</string>
+  <string name="com.twitter.sdk.android.CONSUMER_SECRET">WSdNfKp0qC1MGgAjmxxKLfG4jmMNhF0e1b1PPROFkDfaEONTl1</string>
+
+  //riteTag
+  <string name="riteTag_clientId">5c715bd5904082e5bedd541be634ab97c6b97fa9318a</string>
+  <string name="riteTag_clientSecret">5c715bd5904082e5bedd541be634ab97c6b97fa9318a</string>
 </resources>
