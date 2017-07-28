@@ -4,10 +4,12 @@ import abid.challenge.ritetag.com.ritetagchallenge.Injection;
 import abid.challenge.ritetag.com.ritetagchallenge.R;
 import abid.challenge.ritetag.com.ritetagchallenge.util.ActivityUtils;
 import abid.challenge.ritetag.com.ritetagchallenge.util.EspressoIdlingResource;
+import android.content.Intent;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import com.twitter.sdk.android.core.Twitter;
 
 public class TwitterLogInActivity extends AppCompatActivity {
 
@@ -30,8 +32,18 @@ public class TwitterLogInActivity extends AppCompatActivity {
     // Create the presenter
     mTwitterPresenter = new TwitterLoginPresenter(
         Injection.provideUserDataSource(getApplicationContext()) , twitterLoginFragment);
+
+    Twitter.initialize(this);
   }
 
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    TwitterLoginFragment twitterLoginFragment = (TwitterLoginFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+    if (twitterLoginFragment != null) {
+      twitterLoginFragment.onActivityResult(requestCode, resultCode, data);
+    }
+  }
 
   @VisibleForTesting
   public IdlingResource getCountingIdlingResource() {

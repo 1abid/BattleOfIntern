@@ -39,12 +39,14 @@ public class TwitterLoginFragment extends Fragment implements TwitterLoginContra
 
     twitterLoginButton = (TwitterLoginButton) rootView.findViewById(R.id.login_button);
 
+    mPresenter.setTwitterCallback(twitterLoginButton);
+
     return rootView ;
   }
 
   @Override public void onResume() {
     super.onResume();
-    mPresenter.start();
+    //mPresenter.start();
   }
 
   @Override public void setPresenter(TwitterLoginContract.Presenter presenter) {
