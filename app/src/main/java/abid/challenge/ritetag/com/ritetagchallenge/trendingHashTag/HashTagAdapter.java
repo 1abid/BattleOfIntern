@@ -42,9 +42,9 @@ public class HashTagAdapter extends RecyclerView.Adapter<HashTagAdapter.TagsView
   @Override public void onBindViewHolder(TagsViewHolder holder, int position) {
     HashTag tag = mListTags.get(position);
 
-    holder.title.setText(tag.getTag());
-    holder.tweets.setText(tag.getTweets());
-    holder.reTweets.setText(tag.getRetweets());
+    holder.title.setText("#"+tag.getTag());
+    holder.tweets.setText("Tweets: "+String.valueOf(tag.getTweets()));
+    holder.reTweets.setText("Re Tweets: "+String.valueOf(tag.getRetweets()));
   }
 
   public void replaceData(List<HashTag> tags){

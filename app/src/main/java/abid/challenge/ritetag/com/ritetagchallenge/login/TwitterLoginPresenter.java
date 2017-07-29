@@ -66,7 +66,6 @@ public class TwitterLoginPresenter implements TwitterLoginContract.Presenter {
       @Override public void success(Result<TwitterSession> result) {
         Log.d(getClass().getSimpleName() , "success twitter login :"+result.data.getUserName());
         getRiteTagAccessToken();
-        RestServiceGenerator.changeApiBaseUrl(mTwitterLoginView.shareContext().getString(R.string.api_end_point));
         saveUser(result);
       }
 

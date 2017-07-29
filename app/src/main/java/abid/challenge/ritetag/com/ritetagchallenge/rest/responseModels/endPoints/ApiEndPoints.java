@@ -34,5 +34,5 @@ public interface ApiEndPoints {
 
 
   @GET("search/trending")
-  Call<HashTagResponse> getTrendingHashTags(@Query("green") boolean green , @Query("latin") boolean latin);
+  Call<HashTagResponse> getTrendingHashTags(@Query("green") int green , @Query("latin") int latin);
 }

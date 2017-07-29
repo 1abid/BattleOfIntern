@@ -51,13 +51,16 @@ public class TrendingHashTagPresenter implements TrendingHashTagContract.Present
 
     ApiEndPoints apiEndPoints = RestServiceGenerator.createService(ApiEndPoints.class , savedAccessToken,mTrendHashTagView.shareContext());
 
-    Call<HashTagResponse> hashTagCall = apiEndPoints.getTrendingHashTags(true, true);
+    Call<HashTagResponse> hashTagCall = apiEndPoints.getTrendingHashTags(1, 1);
 
     hashTagCall.enqueue(new Callback<HashTagResponse>() {
       @Override
       public void onResponse(Call<HashTagResponse> call, Response<HashTagResponse> response) {
         mTrendHashTagView.showProgress(false);
         Log.w("tag response ",new GsonBuilder().setPrettyPrinting().create().toJson(response));
+        if(response.code() == 200)
+          mTrendHashTagView.showTags(response.body().getTags());
+
       }
 
       @Override public void onFailure(Call<HashTagResponse> call, Throwable t) {

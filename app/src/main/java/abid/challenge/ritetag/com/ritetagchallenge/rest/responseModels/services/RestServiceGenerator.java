@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RestServiceGenerator {
 
   public static final String API_AUTH_BASE_URL = "https://ritekit.com/";
-  public static  String API_BASE_URl ;
+  public static  String API_BASE_URl = "https://api.ritekit.com/v1/";
   public static final String API_OAUTH_REDIRECT = "https://ritekit.com/";
 
   private static OkHttpClient.Builder httpClient;
@@ -53,8 +53,12 @@ public class RestServiceGenerator {
   public static <S> S createService(Class<S> serviceClass, AccessToken accessToken, Context c) {
     httpClient = new OkHttpClient.Builder();
     builder = new Retrofit.Builder()
-        .baseUrl(API_AUTH_BASE_URL)
+        .baseUrl(API_BASE_URl)
         .addConverterFactory(GsonConverterFactory.create());
+
+    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+    loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+    httpClient.addInterceptor(loggingInterceptor);
 
     if(accessToken != null) {
       mContext = c;
@@ -87,6 +91,10 @@ public class RestServiceGenerator {
           }
 
           // We need a new client, since we don't want to make another call using our client with access token
+          builder = new Retrofit.Builder()
+              .baseUrl(API_AUTH_BASE_URL)
+              .addConverterFactory(GsonConverterFactory.create());
+
           ApiEndPoints tokenClient = createService(ApiEndPoints.class);
           Call<AccessToken> call = tokenClient.getRefreshAccessToken(mToken.getRefreshToken(),
               mToken.getClientID(), mToken.getClientSecret(), API_OAUTH_REDIRECT,
