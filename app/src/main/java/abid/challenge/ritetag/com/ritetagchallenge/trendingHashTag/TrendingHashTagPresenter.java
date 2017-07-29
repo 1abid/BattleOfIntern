@@ -2,7 +2,20 @@ package abid.challenge.ritetag.com.ritetagchallenge.trendingHashTag;
 
 import abid.challenge.ritetag.com.ritetagchallenge.data.User;
 import abid.challenge.ritetag.com.ritetagchallenge.data.UserDataSource;
+import abid.challenge.ritetag.com.ritetagchallenge.login.TwitterLoginPresenter;
+import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.AccessToken;
+import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.HashTagResponse;
+import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.endPoints.ApiEndPoints;
+import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.services.RestServiceGenerator;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.compat.BuildConfig;
+import android.util.Log;
+import com.google.gson.GsonBuilder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -32,6 +45,39 @@ public class TrendingHashTagPresenter implements TrendingHashTagContract.Present
   }
 
   private void loadHashTag() {
+    mTrendHashTagView.showProgress(true);
+
+    AccessToken savedAccessToken = getAccessToken();
+
+    ApiEndPoints apiEndPoints = RestServiceGenerator.createService(ApiEndPoints.class , savedAccessToken,mTrendHashTagView.shareContext());
+
+    Call<HashTagResponse> hashTagCall = apiEndPoints.getTrendingHashTags(true, true);
+
+    hashTagCall.enqueue(new Callback<HashTagResponse>() {
+      @Override
+      public void onResponse(Call<HashTagResponse> call, Response<HashTagResponse> response) {
+        mTrendHashTagView.showProgress(false);
+        Log.w("tag response ",new GsonBuilder().setPrettyPrinting().create().toJson(response));
+      }
+
+      @Override public void onFailure(Call<HashTagResponse> call, Throwable t) {
+
+      }
+    });
+  }
+
+  private AccessToken getAccessToken() {
+    final SharedPreferences prefs = mTrendHashTagView.shareContext().getSharedPreferences(
+        BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+    AccessToken token =new AccessToken();
+
+    token.setAccessToken(prefs.getString("oauth.accesstoken" , ""));
+    token.setTokenType(prefs.getString("oauth.tokentype" , ""));
+    token.setRefreshToken(prefs.getString("oauth.refreshtoken" , ""));
+    token.setClientID(TwitterLoginPresenter.API_OAUTH_CLIENTID);
+    token.setClientSecret(TwitterLoginPresenter.API_OAUTH_CLIENTSECRET);
+
+    return token ;
   }
 
   @Override public void logOutUser() {

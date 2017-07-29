@@ -25,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RestServiceGenerator {
 
   public static final String API_AUTH_BASE_URL = "https://ritekit.com/";
+  public static  String API_BASE_URl ;
   public static final String API_OAUTH_REDIRECT = "https://ritekit.com/";
 
   private static OkHttpClient.Builder httpClient;
@@ -125,5 +126,13 @@ public class RestServiceGenerator {
       result++;
     }
     return result;
+  }
+
+  public static void changeApiBaseUrl(String newApiBaseUrl) {
+    API_BASE_URl = newApiBaseUrl;
+
+    builder = new Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(API_BASE_URl);
   }
 }

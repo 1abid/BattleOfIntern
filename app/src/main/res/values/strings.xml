@@ -10,8 +10,7 @@
   <string name="com.twitter.sdk.android.CONSUMER_SECRET">WSdNfKp0qC1MGgAjmxxKLfG4jmMNhF0e1b1PPROFkDfaEONTl1</string>
 
   //riteTag
-  <string name="riteTag_clientId">5c715bd5904082e5bedd541be634ab97c6b97fa9318a</string>
-  <string name="riteTag_clientSecret">5c715bd5904082e5bedd541be634ab97c6b97fa9318a</string>
+  <string name="api_end_point">https://api.ritekit.com/v1/</string>
 
   //toasts
   <string name="not_saved_user">A user is not saved</string>
