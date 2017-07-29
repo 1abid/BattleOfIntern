@@ -1,6 +1,7 @@
 package abid.challenge.ritetag.com.ritetagchallenge.trendingHashTag;
 
 import abid.challenge.ritetag.com.ritetagchallenge.R;
+import abid.challenge.ritetag.com.ritetagchallenge.hashTagInfluence.HashTagInfluenceActivity;
 import abid.challenge.ritetag.com.ritetagchallenge.login.TwitterLogInActivity;
 import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.HashTag;
 import android.content.Context;
@@ -12,8 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +46,9 @@ public class TrendingHashTagFragment extends Fragment implements TrendingHashTag
 
   HashTagAdapter.TagItemListener mItemListener = new HashTagAdapter.TagItemListener() {
     @Override public void onItemClick(HashTag tag) {
-
+        Intent intent = new Intent(getContext() , HashTagInfluenceActivity.class);
+        intent.putExtra("tag" , tag.getTag());
+        startActivity(intent);
     }
   };
 
