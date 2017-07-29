@@ -7,6 +7,7 @@ import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.AccessTok
 import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.HashTagResponse;
 import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.endPoints.ApiEndPoints;
 import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.services.RestServiceGenerator;
+import abid.challenge.ritetag.com.ritetagchallenge.util.ActivityUtils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -26,22 +27,20 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TrendingHashTagPresenter implements TrendingHashTagContract.Presenter {
 
-  private final UserDataSource mDataSource ;
+  private final UserDataSource mDataSource;
 
-  private final TrendingHashTagContract.view mTrendHashTagView ;
+  private final TrendingHashTagContract.view mTrendHashTagView;
 
   public TrendingHashTagPresenter(@NonNull UserDataSource mDataSource,
       @NonNull TrendingHashTagContract.view mTrendHashTagView) {
-    this.mDataSource = checkNotNull(mDataSource , "user data source can not be null");
-    this.mTrendHashTagView = checkNotNull(mTrendHashTagView , "view can not be null");
+    this.mDataSource = checkNotNull(mDataSource, "user data source can not be null");
+    this.mTrendHashTagView = checkNotNull(mTrendHashTagView, "view can not be null");
 
     mTrendHashTagView.setPresenter(this);
   }
 
-
   @Override public void start() {
-
-    loadHashTag();
+    if (ActivityUtils.isNetworkConnected(mTrendHashTagView.shareContext())) loadHashTag();
   }
 
   private void loadHashTag() {
@@ -49,7 +48,9 @@ public class TrendingHashTagPresenter implements TrendingHashTagContract.Present
 
     AccessToken savedAccessToken = getAccessToken();
 
-    ApiEndPoints apiEndPoints = RestServiceGenerator.createService(ApiEndPoints.class , savedAccessToken,mTrendHashTagView.shareContext());
+    ApiEndPoints apiEndPoints =
+        RestServiceGenerator.createService(ApiEndPoints.class, savedAccessToken,
+            mTrendHashTagView.shareContext());
 
     Call<HashTagResponse> hashTagCall = apiEndPoints.getTrendingHashTags(1, 1);
 
@@ -57,10 +58,8 @@ public class TrendingHashTagPresenter implements TrendingHashTagContract.Present
       @Override
       public void onResponse(Call<HashTagResponse> call, Response<HashTagResponse> response) {
         mTrendHashTagView.showProgress(false);
-        Log.w("tag response ",new GsonBuilder().setPrettyPrinting().create().toJson(response));
-        if(response.code() == 200)
-          mTrendHashTagView.showTags(response.body().getTags());
-
+        //Log.w("tag response ",new GsonBuilder().setPrettyPrinting().create().toJson(response));
+        if (response.code() == 200) mTrendHashTagView.showTags(response.body().getTags());
       }
 
       @Override public void onFailure(Call<HashTagResponse> call, Throwable t) {
@@ -70,17 +69,17 @@ public class TrendingHashTagPresenter implements TrendingHashTagContract.Present
   }
 
   private AccessToken getAccessToken() {
-    final SharedPreferences prefs = mTrendHashTagView.shareContext().getSharedPreferences(
-        BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
-    AccessToken token =new AccessToken();
+    final SharedPreferences prefs = mTrendHashTagView.shareContext()
+        .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+    AccessToken token = new AccessToken();
 
-    token.setAccessToken(prefs.getString("oauth.accesstoken" , ""));
-    token.setTokenType(prefs.getString("oauth.tokentype" , ""));
-    token.setRefreshToken(prefs.getString("oauth.refreshtoken" , ""));
+    token.setAccessToken(prefs.getString("oauth.accesstoken", ""));
+    token.setTokenType(prefs.getString("oauth.tokentype", ""));
+    token.setRefreshToken(prefs.getString("oauth.refreshtoken", ""));
     token.setClientID(TwitterLoginPresenter.API_OAUTH_CLIENTID);
     token.setClientSecret(TwitterLoginPresenter.API_OAUTH_CLIENTSECRET);
 
-    return token ;
+    return token;
   }
 
   @Override public void logOutUser() {

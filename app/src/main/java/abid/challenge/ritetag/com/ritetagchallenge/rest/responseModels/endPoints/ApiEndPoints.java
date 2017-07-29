@@ -2,6 +2,7 @@ package abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.endPoint
 
 import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.AccessToken;
 import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.HashTagResponse;
+import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.InfluenceResponse;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -35,4 +36,7 @@ public interface ApiEndPoints {
 
   @GET("search/trending")
   Call<HashTagResponse> getTrendingHashTags(@Query("green") int green , @Query("latin") int latin);
+
+  @GET("influencers/hashtag")
+  Call<InfluenceResponse> getInfluences(@Query("hashtag") String tag);
 }

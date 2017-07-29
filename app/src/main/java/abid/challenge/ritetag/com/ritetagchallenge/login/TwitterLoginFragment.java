@@ -2,6 +2,7 @@ package abid.challenge.ritetag.com.ritetagchallenge.login;
 
 import abid.challenge.ritetag.com.ritetagchallenge.R;
 import abid.challenge.ritetag.com.ritetagchallenge.trendingHashTag.TrendingHashTagActivity;
+import abid.challenge.ritetag.com.ritetagchallenge.util.ActivityUtils;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,16 +24,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * mail : la4508@gmail.com
  */
 
-public class TwitterLoginFragment extends Fragment implements TwitterLoginContract.view{
+public class TwitterLoginFragment extends Fragment implements TwitterLoginContract.view {
 
-  private TwitterLoginContract.Presenter mPresenter ;
+  private TwitterLoginContract.Presenter mPresenter;
 
-  private TwitterLoginButton twitterLoginButton ;
+  private TwitterLoginButton twitterLoginButton;
+
+  private View rootView;
 
   public TwitterLoginFragment() {
   }
 
-  public static TwitterLoginFragment newInstance(){
+  public static TwitterLoginFragment newInstance() {
     return new TwitterLoginFragment();
   }
 
@@ -44,18 +47,24 @@ public class TwitterLoginFragment extends Fragment implements TwitterLoginContra
   @Nullable @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    View rootView = inflater.inflate(R.layout.twitter_log_in_frag , container , false);
+    rootView = inflater.inflate(R.layout.twitter_log_in_frag, container, false);
 
     twitterLoginButton = (TwitterLoginButton) rootView.findViewById(R.id.login_button);
 
     mPresenter.setTwitterCallback(twitterLoginButton);
 
-    return rootView ;
+    return rootView;
   }
 
   @Override public void onResume() {
     super.onResume();
-    mPresenter.start();
+    if (ActivityUtils.isNetworkConnected(getContext())) {
+      twitterLoginButton.setEnabled(true);
+      mPresenter.start();
+    }
+    else
+      twitterLoginButton.setEnabled(false);
+
   }
 
   @Override public void setPresenter(TwitterLoginContract.Presenter presenter) {
@@ -63,7 +72,7 @@ public class TwitterLoginFragment extends Fragment implements TwitterLoginContra
   }
 
   @Override public void goToNextActivity() {
-      startActivity(new Intent(getContext() , TrendingHashTagActivity.class));
+    startActivity(new Intent(getContext(), TrendingHashTagActivity.class));
     getActivity().finish();
   }
 
@@ -81,6 +90,11 @@ public class TwitterLoginFragment extends Fragment implements TwitterLoginContra
     return twitterLoginButton;
   }
 
+  @Override public View getRootView() {
+    checkNotNull(rootView);
+    return rootView;
+  }
+
   @Override public Context shareContext() {
     return getContext();
   }
@@ -88,6 +102,6 @@ public class TwitterLoginFragment extends Fragment implements TwitterLoginContra
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
 
-    twitterLoginButton.onActivityResult(requestCode , resultCode , data);
+    twitterLoginButton.onActivityResult(requestCode, resultCode, data);
   }
 }

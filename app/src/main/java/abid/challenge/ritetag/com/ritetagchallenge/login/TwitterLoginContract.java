@@ -4,6 +4,7 @@ import abid.challenge.ritetag.com.ritetagchallenge.BasePresenter;
 import abid.challenge.ritetag.com.ritetagchallenge.BaseView;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.widget.Toast;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
@@ -19,7 +20,7 @@ public interface TwitterLoginContract {
     void showToast(Snackbar snakbar);
     void showToast(Toast toast);
     TwitterLoginButton getLogInButton();
-
+    View getRootView();
     Context shareContext();
   }
 

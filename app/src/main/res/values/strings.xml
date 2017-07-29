@@ -16,4 +16,6 @@
   <string name="not_saved_user">A user is not saved</string>
   <string name="welcome">Welcome back</string>
   <string name="trnding_hash_title">Trending HasTags for</string>
+  <string name="influence"> Influences</string>
+  <string name="follower">Followers : </string>
 </resources>

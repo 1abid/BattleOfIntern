@@ -1,14 +1,11 @@
-package abid.challenge.ritetag.com.ritetagchallenge.trendingHashTag;
+package abid.challenge.ritetag.com.ritetagchallenge.hashTagInfluence;
 
 import abid.challenge.ritetag.com.ritetagchallenge.R;
-import abid.challenge.ritetag.com.ritetagchallenge.hashTagInfluence.HashTagInfluenceActivity;
-import abid.challenge.ritetag.com.ritetagchallenge.login.TwitterLogInActivity;
-import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.HashTag;
-import abid.challenge.ritetag.com.ritetagchallenge.util.ActivityUtils;
+import abid.challenge.ritetag.com.ritetagchallenge.rest.responseModels.Influence;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,44 +24,32 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * mail : la4508@gmail.com
  */
 
-public class TrendingHashTagFragment extends Fragment implements TrendingHashTagContract.view {
+public class InfluenceFragment extends Fragment implements InflueceContract.view {
 
-  private TrendingHashTagContract.Presenter mPresenter;
+  private InflueceContract.presenter mPresenter;
+  private InfluenceAdapter mInfluenceAdapter;
 
-  private HashTagAdapter mHashTagAdapter;
+  private View rootView ;
 
-  public TrendingHashTagFragment() {
+  public InfluenceFragment() {
   }
 
-  public static TrendingHashTagFragment newInstance() {
-    return new TrendingHashTagFragment();
+  public static InfluenceFragment newInstance(){
+    return new InfluenceFragment();
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mHashTagAdapter = new HashTagAdapter(mItemListener, new ArrayList<HashTag>(0));
-  }
-
-  HashTagAdapter.TagItemListener mItemListener = new HashTagAdapter.TagItemListener() {
-    @Override public void onItemClick(HashTag tag) {
-      Intent intent = new Intent(getContext(), HashTagInfluenceActivity.class);
-      intent.putExtra("tag", tag.getTag());
-      startActivity(intent);
-    }
-  };
-
-  @Override public void onResume() {
-    super.onResume();
-    if (ActivityUtils.isNetworkConnected(getContext())) mPresenter.start();
+    mInfluenceAdapter = new InfluenceAdapter(mItemListener , new ArrayList<Influence>(0));
   }
 
   @Nullable @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    View rootView = inflater.inflate(R.layout.trending_hash_fragment, container, false);
+    rootView = inflater.inflate(R.layout.influence_fragment , container , false);
 
-    RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.tags_list);
-    recyclerView.setAdapter(mHashTagAdapter);
+    RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.influence_list);
+    recyclerView.setAdapter(mInfluenceAdapter);
 
     int numColumns = getContext().getResources().getInteger(R.integer.num_notes_columns);
 
@@ -79,29 +64,40 @@ public class TrendingHashTagFragment extends Fragment implements TrendingHashTag
         ContextCompat.getColor(getActivity(), R.color.colorAccent),
         ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-      @Override public void onRefresh() {
-
+      @Override
+      public void onRefresh() {
         mPresenter.start();
       }
     });
     return rootView;
   }
 
-  @Override public void setPresenter(TrendingHashTagContract.Presenter presenter) {
-    mPresenter = checkNotNull(presenter);
+  InfluenceAdapter.InfluenceItemListener mItemListener = new InfluenceAdapter.InfluenceItemListener() {
+    @Override public void onItemClick(Influence tag) {
+
+    }
+  };
+
+  @Override public void onResume() {
+    super.onResume();
+    mPresenter.start();
+  }
+
+  @Override public void setPresenter(InflueceContract.presenter presenter) {
+    mPresenter  = presenter ;
   }
 
   @Override public Context shareContext() {
     return getContext();
   }
 
-  @Override public void showInitialActivity() {
-    getActivity().startActivity(new Intent(getContext(), TwitterLogInActivity.class));
-    getActivity().finish();
+  @Override public void showInfluence(List<Influence> influenceList) {
+    mInfluenceAdapter.replaceData(influenceList);
   }
 
   @Override public void showProgress(final boolean show) {
-    if (getView() == null) return;
+    if(getView() == null)
+      return;
     final SwipeRefreshLayout refreshlayout =
         (SwipeRefreshLayout) getView().findViewById(R.id.refresh_layout);
 
@@ -112,7 +108,12 @@ public class TrendingHashTagFragment extends Fragment implements TrendingHashTag
     });
   }
 
-  @Override public void showTags(List<HashTag> tags) {
-    mHashTagAdapter.replaceData(tags);
+  @Override public void showToast(Snackbar snackbar) {
+    snackbar.show();
+  }
+
+  @Override public View getRootView() {
+    checkNotNull(rootView);
+    return rootView ;
   }
 }
